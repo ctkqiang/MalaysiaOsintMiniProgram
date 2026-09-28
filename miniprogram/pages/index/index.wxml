@@ -35,11 +35,12 @@
         <!-- 结果：风险结论印章 -->
         <block wx:if="{{result}}">
           <view class="result">
-            <dj-stamp wx:if="{{result.risk === 'hit'}}" risk="hit" size="{{88}}" />
-            <dj-stamp wx:else risk="clean" size="{{88}}" />
+            <dj-stamp risk="{{result.risk}}" size="{{88}}" />
             <view class="result__text">
               <text class="result__main serif" wx:if="{{result.risk === 'hit'}}">{{s.home_risk_hit}}（{{result.count}}）</text>
+              <text class="result__main serif" wx:elif="{{result.risk === 'unknown'}}">{{s.home_risk_unknown}}</text>
               <text class="result__main serif" wx:else>{{s.home_risk_clean}}</text>
+              <text class="result__sub" wx:if="{{result.risk === 'unknown'}}">{{s.home_risk_unknown_hint}}</text>
             </view>
           </view>
 

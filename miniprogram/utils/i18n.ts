@@ -22,6 +22,7 @@ const zh: Dict = {
   home_risk_clean: '未命中诈骗记录',
   home_risk_hit: '命中诈骗记录',
   home_risk_unknown: '无法判定',
+  home_risk_unknown_hint: '官方数据源未返回可核验的明细（实时记录需有效验证码），既非命中也非清白，请前往 semakmule.rmp.gov.my 人工核验。',
 
   id_title: '身份证综合查询',
   id_ph: '输入 12 位 MyKad 号码',
@@ -135,6 +136,7 @@ const en: Dict = {
   home_risk_clean: 'No fraud record',
   home_risk_hit: 'Fraud record found',
   home_risk_unknown: 'Unknown',
+  home_risk_unknown_hint: 'The official source returned no verifiable detail (live records need a valid captcha). Neither a hit nor clean — verify manually at semakmule.rmp.gov.my.',
 
   id_title: 'ID Comprehensive Check',
   id_ph: '12-digit MyKad number',
@@ -248,6 +250,7 @@ const ms: Dict = {
   home_risk_clean: 'Tiada rekod penipuan',
   home_risk_hit: 'Rekod penipuan ditemui',
   home_risk_unknown: 'Tidak diketahui',
+  home_risk_unknown_hint: 'Sumber rasmi tidak mengembalikan butiran yang boleh disahkan (rekod langsung perlu captcha sah). Bukan kena dan bukan bersih — sahkan di semakmule.rmp.gov.my.',
 
   id_title: 'Semakan ID Menyeluruh',
   id_ph: 'Nombor MyKad 12 angka',

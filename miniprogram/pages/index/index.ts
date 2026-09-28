@@ -9,7 +9,7 @@ const S = [
   'app_name', 'app_slogan', 'home_title', 'home_semak_ph', 'home_semak_btn',
   'home_bnm_title', 'home_bnm_empty', 'home_bnm_failed', 'home_bnm_retry',
   'home_history_title', 'home_history_empty',
-  'home_risk_clean', 'home_risk_hit', 'home_risk_unknown',
+  'home_risk_clean', 'home_risk_hit', 'home_risk_unknown', 'home_risk_unknown_hint',
   'id_title', 'co_title', 'tab_social', 'tab_court',
   'common_clear_history', 'common_disclaimer',
 ]
@@ -32,6 +32,7 @@ Component({
     bnm: [] as Array<{ name: string; website: string; date: string }>,
     bnmLoaded: false,
     bnmFailed: false,
+    bnmError: '',
     // 历史
     history: [] as Array<HistoryEntry & { riskText: string }>,
     // 免责声明
@@ -76,14 +77,23 @@ Component({
 
     async loadBnm() {
       const res = await bnmAlerts(1)
-      if (res.state === 'ok' && res.data && res.data.entries) {
+      if (res.state === 'ok' && res.data && res.data.entries && res.data.entries.length > 0) {
         this.setData({
           bnm: res.data.entries.slice(0, 20),
           bnmLoaded: true,
           bnmFailed: false,
+          bnmError: '',
         })
       } else {
-        this.setData({ bnm: [], bnmLoaded: true, bnmFailed: true })
+        // 区分三类失败：请求被拦截/超时（有 message）、拿到页面但解析为 0 行
+        const reason = res.state === 'ok' ? 'parsed_0_rows' : res.message || 'unknown'
+        console.warn('[bnm] load failed:', reason)
+        this.setData({
+          bnm: [],
+          bnmLoaded: true,
+          bnmFailed: true,
+          bnmError: reason,
+        })
       }
     },
 
@@ -100,13 +110,22 @@ Component({
       this.setData({ loading: true })
       const res = await semakMule(q)
       if (res.state === 'error' || !res.data) {
-        this.setData({ loading: false })
+        // 请求失败 ≠ 无风险：结论置为"无法判定"，避免残留上一次的旧结论
+        this.setData({
+          loading: false,
+          result: { risk: 'unknown', count: 0, rows: [] },
+        })
+        addHistory('semak', q, 'unknown')
+        this.loadHistory()
         wx.showToast({ title: this.data.s.home_risk_unknown, icon: 'none' })
         return
       }
       const d = res.data as SemakMuleResult
-      const count = d.count || 0
-      const risk: RiskLevel = count > 0 ? 'hit' : 'clean'
+      // 命中判定只看实际返回的行数（api 层已剔除服务端虚高的 count）。
+      // 有行=确证命中；无行≠清白：CCIS 实时明细需有效验证码，空返回无法区分
+      // "查无记录"与"数据源未放行"，一律判为"无法判定"，不给虚假安心。
+      const count = (d.rows || []).length
+      const risk: RiskLevel = count > 0 ? 'hit' : 'unknown'
       this.setData({
         loading: false,
         result: { risk, count, rows: (d.rows || []).slice(0, 10) },

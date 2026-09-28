@@ -189,11 +189,19 @@ function pick(it: Record<string, unknown>, ...keys: string[]): string {
 // 反诈查询 Semak Mule（对应 checkSemakMule：apikey/Origin/Referer 头 + 嵌套 data 体）
 // ============================================================
 
+/**
+ * 反诈结果归一化。
+ *
+ * ⚠️ 服务端 `count` 字段不可用于风险判定：实测对任意关键词（含乱码）都返回
+ * 递增的 count（如 hsjs→1、najib→2、0137397193→45），而 table_data 均为空数组，
+ * 它是 DataTables 的分页总数而非命中条数。命中与否只能以实际返回的行数为准。
+ */
 function normalizeSemak(d: Record<string, unknown>): SemakMuleResult {
   const rawRows = (d.table_data || d.rows || []) as string[][]
+  const rows = Array.isArray(rawRows) ? rawRows.filter((r) => Array.isArray(r) && r.length > 0) : []
   return {
-    count: Number(d.count || 0),
-    rows: Array.isArray(rawRows) ? rawRows : [],
+    count: rows.length,
+    rows,
   }
 }
 
