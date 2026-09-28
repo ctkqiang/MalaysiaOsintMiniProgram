@@ -4,6 +4,7 @@ import { addHistory, listHistory } from '../../utils/history'
 import { stringsFor } from '../../utils/i18n'
 import { getLang, getThemeMode, resolveTheme } from '../../utils/settings'
 import { ECourtResult, HistoryEntry } from '../../utils/models'
+import * as haptic from '../../utils/haptic'
 
 const S = [
   'ct_title', 'ct_ph', 'ct_btn', 'ct_result', 'ct_no_result', 'ct_judge',
@@ -60,12 +61,14 @@ Component({
     },
 
     onPickRecent(e: WechatMiniprogram.TouchEvent) {
+      haptic.tap()
       const q = e.currentTarget.dataset.q as string
       this.setData({ query: q })
       this.onSearch()
     },
 
     async onSearch() {
+      haptic.tap()
       this.doSearch(1, false)
     },
 
@@ -73,6 +76,7 @@ Component({
     onMorePage() {
       const r = this.data.result
       if (!r || this.data.loading || r.currPage >= r.totalPage) return
+      haptic.tap()
       this.doSearch(r.currPage + 1, true)
     },
 
@@ -88,6 +92,7 @@ Component({
         // 透出具体失败原因（域名拦截 / 超时 / HTTP 码），便于真机定位
         const detail = res.message || ''
         const blocked = detail.indexOf('domain') !== -1
+        haptic.warn()
         this.setData({
           loading: false,
           errMsg: (blocked ? this.data.s.ct_domain_hint : this.data.s.ct_failed) + (detail ? '（' + detail + '）' : ''),
@@ -98,6 +103,9 @@ Component({
       if (append && this.data.result) {
         const prev = this.data.result
         folded.items = prev.items.concat(folded.items)
+        haptic.success()
+      } else {
+        haptic.risk(folded.items.length > 0 ? 'hit' : 'clean')
       }
       this.setData({ loading: false, result: folded, expandIdx: -1 })
       if (!append) {
@@ -108,11 +116,13 @@ Component({
 
     /** 关键词两行截断，点击展开/收起 */
     onToggleExpand(e: WechatMiniprogram.TouchEvent) {
+      haptic.tap()
       const i = Number(e.currentTarget.dataset.i)
       this.setData({ expandIdx: this.data.expandIdx === i ? -1 : i })
     },
 
     onOpenDoc(e: WechatMiniprogram.TouchEvent) {
+      haptic.tap()
       const id = e.currentTarget.dataset.id as string
       const url = ecourtDocUrl(id)
       if (!url) {
@@ -122,7 +132,10 @@ Component({
       // 小程序内无法直接打开政府站 PDF，复制到剪贴板引导系统浏览器查看
       wx.setClipboardData({
         data: url,
-        success: () => wx.showToast({ title: this.data.s.ct_doc_hint, icon: 'none' }),
+        success: () => {
+          haptic.success()
+          wx.showToast({ title: this.data.s.ct_doc_hint, icon: 'none' })
+        },
       })
     },
 
@@ -130,7 +143,10 @@ Component({
       const text = e.currentTarget.dataset.text as string
       wx.setClipboardData({
         data: text,
-        success: () => wx.showToast({ title: this.data.s.common_copied, icon: 'none' }),
+        success: () => {
+          haptic.success()
+          wx.showToast({ title: this.data.s.common_copied, icon: 'none' })
+        },
       })
     },
   },

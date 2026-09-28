@@ -56,6 +56,43 @@
   word-break: break-all;
 }
 
+/* 场景行（推送开关列表） */
+.scene {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid var(--outline);
+}
+.scene__mid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.scene__name {
+  font-size: 26rpx;
+  color: var(--on-surface);
+}
+.scene__state {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  color: var(--on-variant);
+}
+.scene__btn {
+  flex-shrink: 0;
+  margin-left: 20rpx;
+  padding: 12rpx 28rpx;
+  font-size: 24rpx;
+  border: 1rpx solid var(--outline);
+  border-radius: 999rpx;
+  color: var(--on-variant);
+}
+.scene__btn.is-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #FDFCF8;
+}
+
 /* 动作行（重置免责门） */
 .action {
   text-align: center;

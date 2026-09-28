@@ -4,6 +4,7 @@ import { addHistory, listHistory } from '../../utils/history'
 import { stringsFor } from '../../utils/i18n'
 import { getLang, getThemeMode, resolveTheme, isDisclaimerAccepted, acceptDisclaimer } from '../../utils/settings'
 import { HistoryEntry, RiskLevel, SemakMuleResult } from '../../utils/models'
+import * as haptic from '../../utils/haptic'
 
 const S = [
   'app_name', 'app_slogan', 'home_title', 'home_semak_ph', 'home_semak_btn',
@@ -102,6 +103,7 @@ Component({
     },
 
     async onSearch() {
+      haptic.tap()
       const q = (this.data.query || '').trim()
       if (!q) {
         wx.showToast({ title: this.data.s.home_semak_ph, icon: 'none' })
@@ -126,6 +128,7 @@ Component({
       // "查无记录"与"数据源未放行"，一律判为"无法判定"，不给虚假安心。
       const count = (d.rows || []).length
       const risk: RiskLevel = count > 0 ? 'hit' : 'unknown'
+      haptic.risk(risk)
       this.setData({
         loading: false,
         result: { risk, count, rows: (d.rows || []).slice(0, 10) },
@@ -135,10 +138,12 @@ Component({
     },
 
     onClearHistory() {
+      haptic.tap()
       wx.showModal({
         title: this.data.s.common_clear_history,
         success: (r) => {
           if (r.confirm) {
+            haptic.warn()
             wx.setStorageSync('search_history', [])
             this.loadHistory()
           }
@@ -147,28 +152,36 @@ Component({
     },
 
     onAcceptDisclaimer() {
+      haptic.success()
       acceptDisclaimer()
       this.setData({ showDisclaimer: false })
     },
 
     onCopy(e: WechatMiniprogram.TouchEvent) {
       const text = e.currentTarget.dataset.text as string
-      wx.setClipboardData({ data: text })
+      wx.setClipboardData({
+        data: text,
+        success: () => haptic.success(),
+      })
     },
 
     goIdentity() {
+      haptic.tap()
       wx.reLaunch({ url: '/pages/identity/identity' })
     },
 
     goCompany() {
+      haptic.tap()
       wx.reLaunch({ url: '/pages/company/company' })
     },
 
     goSocial() {
+      haptic.tap()
       wx.reLaunch({ url: '/pages/social/social' })
     },
 
     goCourt() {
+      haptic.tap()
       wx.reLaunch({ url: '/pages/court/court' })
     },
   },

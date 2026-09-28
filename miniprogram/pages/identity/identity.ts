@@ -5,6 +5,7 @@ import { stringsFor } from '../../utils/i18n'
 import { getLang, getThemeMode, resolveTheme } from '../../utils/settings'
 import { addHistory } from '../../utils/history'
 import { MyKadInfo, RiskLevel, SourceStatus } from '../../utils/models'
+import * as haptic from '../../utils/haptic'
 
 const S = [
   'id_title', 'id_ph', 'id_btn', 'id_birthday', 'id_state', 'id_tail', 'id_invalid',
@@ -59,13 +60,18 @@ Component({
       const text = e.currentTarget.dataset.text as string
       wx.setClipboardData({
         data: text,
-        success: () => wx.showToast({ title: this.data.s.common_copied, icon: 'none' }),
+        success: () => {
+          haptic.success()
+          wx.showToast({ title: this.data.s.common_copied, icon: 'none' })
+        },
       })
     },
 
     async onSearch() {
+      haptic.tap()
       const q = (this.data.query || '').trim()
       if (!isMyKadValid(q)) {
+        haptic.warn()
         this.setData({ errMsg: this.data.s.id_invalid, mykad: null })
         return
       }
@@ -78,6 +84,7 @@ Component({
       this.setData({ loading: false, sources: keys.map((k, i) => ({ key: k, status: list[i] })) })
       // 历史记录取最严重结论：任一命中即 hit
       const worst: RiskLevel = list.some((x) => x.risk === 'hit') ? 'hit' : (list.every((x) => x.risk === 'clean') ? 'clean' : 'unknown')
+      haptic.risk(worst)
       addHistory('identity', mykad.ic, worst)
     },
 

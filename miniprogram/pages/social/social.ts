@@ -4,6 +4,7 @@ import { addHistory, listHistory } from '../../utils/history'
 import { stringsFor } from '../../utils/i18n'
 import { getLang, getThemeMode, resolveTheme } from '../../utils/settings'
 import { HistoryEntry, SocialHit } from '../../utils/models'
+import * as haptic from '../../utils/haptic'
 
 const S = [
   'so_title', 'so_ph', 'so_btn', 'so_result', 'so_no_hit',
@@ -56,12 +57,14 @@ Component({
     },
 
     onPickRecent(e: WechatMiniprogram.TouchEvent) {
+      haptic.tap()
       const q = e.currentTarget.dataset.q as string
       this.setData({ query: q })
       this.onSearch()
     },
 
     async onSearch() {
+      haptic.tap()
       const q = (this.data.query || '').trim().replace(/^@/, '')
       if (!q) {
         this.setData({ errMsg: this.data.s.so_ph })
@@ -70,6 +73,7 @@ Component({
       this.setData({ loading: true, errMsg: '', searched: true })
       const res = await socialEnumerate(q)
       if (res.state !== 'ok' || !res.data) {
+        haptic.warn()
         this.setData({
           loading: false,
           hits: [],
@@ -84,6 +88,7 @@ Component({
         // 平台首字圆章文本：拉丁取首字母大写，中文取首字
         initial: socialInitial(h.platform),
       }))
+      haptic.risk(hits.length > 0 ? 'hit' : 'clean')
       this.setData({ loading: false, hits })
       addHistory('social', q, hits.length > 0 ? 'hit' : 'clean')
       this.loadRecent()
@@ -93,7 +98,10 @@ Component({
       const text = e.currentTarget.dataset.text as string
       wx.setClipboardData({
         data: text,
-        success: () => wx.showToast({ title: this.data.s.common_copied, icon: 'none' }),
+        success: () => {
+          haptic.success()
+          wx.showToast({ title: this.data.s.common_copied, icon: 'none' })
+        },
       })
     },
   },

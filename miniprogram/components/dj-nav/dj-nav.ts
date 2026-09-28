@@ -1,5 +1,6 @@
 // 顶栏：状态栏占位 + 题字式标题 + 右侧印章式设置入口
 import { getThemeMode, resolveTheme } from '../../utils/settings'
+import * as haptic from '../../utils/haptic'
 
 Component({
   properties: {
@@ -33,9 +34,11 @@ Component({
       })
     },
     onBack() {
+      haptic.tap()
       wx.navigateBack({ delta: 1 })
     },
     onSettings() {
+      haptic.tap()
       wx.navigateTo({ url: '/pages/settings/settings' })
     },
   },

@@ -4,6 +4,16 @@ import { Lang, ThemeMode, ResolvedTheme } from './models'
 const KEY_LANG = 'settings.lang'
 const KEY_THEME = 'settings.theme'
 const KEY_DISCLAIMER = 'settings.disclaimer_ok'
+const KEY_HAPTICS = 'settings.haptics'
+
+/** 触感反馈开关，默认开启（仅显式关闭后为 false） */
+export function getHaptics(): boolean {
+  return wx.getStorageSync(KEY_HAPTICS) !== false
+}
+
+export function setHaptics(on: boolean): void {
+  wx.setStorageSync(KEY_HAPTICS, !!on)
+}
 
 export function getLang(): Lang {
   const v = wx.getStorageSync(KEY_LANG)

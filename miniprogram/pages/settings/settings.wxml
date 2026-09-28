@@ -41,17 +41,36 @@
       </view>
     </view>
 
-    <!-- 订阅消息推送（BNM 警示通知） -->
+    <!-- 订阅消息推送（三场景） -->
     <view class="card">
       <view class="card__rail"></view>
       <view class="card__body">
         <view class="row-between">
           <text class="card__title serif set-inline-title">{{s.set_push}}</text>
-          <text class="tag {{pushOn ? 'tag-on' : 'tag-pending'}}">{{pushOn ? s.set_push_on : s.set_push_off}}</text>
+          <text class="tag {{pushLast === 'ok' ? 'tag-on' : 'tag-pending'}}" wx:if="{{pushAnyReady}}">{{pushLast === 'ok' ? s.set_push_on : s.set_push_off}}</text>
+          <text class="tag tag-pending" wx:else>{{s.set_push_pending}}</text>
         </view>
         <text class="note">{{s.set_push_desc}}</text>
-        <text class="note" wx:if="{{!pushReady}}">{{s.set_push_pending}}</text>
-        <view class="opt serif action" bindtap="onPushToggle">{{pushOn ? s.set_push_off : s.set_push_on}}</view>
+        <view class="scene" wx:for="{{scenes}}" wx:key="scene">
+          <view class="scene__mid">
+            <text class="scene__name">{{s[item.labelKey]}}</text>
+            <text class="scene__state mono">{{item.ready ? (item.on ? s.set_push_on : s.set_push_off) : s.set_push_pending}}</text>
+          </view>
+          <view class="opt serif scene__btn {{item.on ? 'is-active' : ''}}" data-scene="{{item.scene}}" bindtap="onSceneToggle">{{item.on ? s.set_push_off : s.set_push_on}}</view>
+        </view>
+        <view class="opt serif action" bindtap="onPushAll">{{s.set_push_all}}</view>
+      </view>
+    </view>
+
+    <!-- 触感反馈 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <view class="row-between">
+          <text class="card__title serif set-inline-title">{{s.set_haptics}}</text>
+          <view class="opt serif scene__btn {{hapticsOn ? 'is-active' : ''}}" bindtap="onHapticsToggle">{{hapticsOn ? s.set_push_on : s.set_push_off}}</view>
+        </view>
+        <text class="note">{{s.set_haptics_desc}}</text>
       </view>
     </view>
 

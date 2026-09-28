@@ -5,6 +5,7 @@ import { stringsFor } from '../../utils/i18n'
 import { getLang, getThemeMode, resolveTheme } from '../../utils/settings'
 import { addHistory } from '../../utils/history'
 import { CompanyInfo, SSMInfo } from '../../utils/models'
+import * as haptic from '../../utils/haptic'
 
 const S = [
   'co_title', 'co_ph', 'co_btn', 'co_entity', 'co_entity_code', 'co_regno', 'co_invalid',
@@ -59,13 +60,18 @@ Component({
       const text = e.currentTarget.dataset.text as string
       wx.setClipboardData({
         data: text,
-        success: () => wx.showToast({ title: this.data.s.common_copied, icon: 'none' }),
+        success: () => {
+          haptic.success()
+          wx.showToast({ title: this.data.s.common_copied, icon: 'none' })
+        },
       })
     },
 
     async onSearch() {
+      haptic.tap()
       const q = (this.data.query || '').trim()
       if (!isSSMValid(q)) {
+        haptic.warn()
         this.setData({ errMsg: this.data.s.co_invalid, ssm: null })
         return
       }
@@ -74,14 +80,17 @@ Component({
 
       const res = await companySearch(ssm.registrationNumber)
       if (res.state === 'ok' && res.data && res.data.name) {
+        haptic.success()
         this.setData({ loading: false, company: res.data })
         addHistory('company', ssm.registrationNumber, 'clean')
       } else if (res.state === 'ok') {
         // 黄页无结果：交叉验证未命中
+        haptic.risk('unknown')
         this.setData({ loading: false, notFound: true })
         addHistory('company', ssm.registrationNumber, 'unknown')
       } else {
         // 网络/解析失败
+        haptic.warn()
         this.setData({ loading: false, notFound: true, failed: true })
         addHistory('company', ssm.registrationNumber, 'unknown')
       }

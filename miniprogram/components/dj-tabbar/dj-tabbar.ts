@@ -1,6 +1,7 @@
 // 底部导航：首页 / 身份 / 企业（自绘，切换用 reLaunch 保持栈干净）
 import { stringsFor } from '../../utils/i18n'
 import { getLang, getThemeMode, resolveTheme } from '../../utils/settings'
+import * as haptic from '../../utils/haptic'
 
 const PAGES = [
   { key: 'tab_home', path: '/pages/index/index' },
@@ -45,6 +46,7 @@ Component({
       if (current && here && current.path === here.path) {
         return
       }
+      haptic.select()
       wx.reLaunch({ url: path })
     },
   },
