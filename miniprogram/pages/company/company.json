@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "dj-nav": "/components/dj-nav/dj-nav",
+    "dj-stamp": "/components/dj-stamp/dj-stamp",
+    "dj-ink": "/components/dj-ink/dj-ink",
+    "dj-tabbar": "/components/dj-tabbar/dj-tabbar"
+  }
+}

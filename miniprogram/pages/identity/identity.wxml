@@ -1,0 +1,80 @@
+<view class="{{themeClass}} page">
+  <dj-nav title="{{s.id_title}}" back="{{true}}" settings="{{true}}" />
+
+  <scroll-view class="body" scroll-y>
+    <!-- 界格输入 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <text class="card__title serif">{{s.id_title}}</text>
+        <view class="field">
+          <input
+            class="field__input mono"
+            type="number"
+            maxlength="14"
+            value="{{query}}"
+            placeholder="{{s.id_ph}}"
+            placeholder-class="field__ph"
+            bindinput="onQueryInput"
+            confirm-type="search"
+            bindconfirm="onSearch"
+          />
+          <view class="field__btn serif {{loading ? 'is-disabled' : ''}}" bindtap="onSearch">{{s.id_btn}}</view>
+        </view>
+        <text class="err" wx:if="{{errMsg}}">{{errMsg}}</text>
+        <dj-ink show="{{loading}}" text="{{s.id_btn}}" />
+      </view>
+    </view>
+
+    <!-- MyKad 简牍横条：出生地 / 日期 / 尾号 -->
+    <view class="card" wx:if="{{mykad}}">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <view class="row-between">
+          <text class="card__title serif">MyKad</text>
+          <text class="link" data-text="{{mykad.ic}}" bindtap="onCopy">{{s.common_copy}}</text>
+        </view>
+        <view class="slip">
+          <view class="slip__cell">
+            <text class="slip__label">{{s.id_birthday}}</text>
+            <text class="slip__value mono">{{mykad.birthday}}</text>
+          </view>
+          <view class="slip__div"></view>
+          <view class="slip__cell">
+            <text class="slip__label">{{s.id_state}}</text>
+            <text class="slip__value">{{mykad.stateNameCn}}</text>
+            <text class="slip__sub mono">{{mykad.stateName}} · {{mykad.stateCode}}</text>
+          </view>
+          <view class="slip__div"></view>
+          <view class="slip__cell">
+            <text class="slip__label">{{s.id_tail}}</text>
+            <text class="slip__value mono">{{mykad.identifier}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 三源核查：三枚印鉴横排 -->
+    <view class="card" wx:if="{{sources.length > 0}}">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <view class="row-between">
+          <text class="card__title serif">{{s.id_three}}</text>
+          <text class="tag-pending" wx:if="{{sources[0].status.state === 'pending'}}">{{s.common_pending_tag}}</text>
+        </view>
+        <view class="stamps">
+          <view class="stamps__item" wx:for="{{sources}}" wx:key="key">
+            <dj-stamp risk="{{item.status.state === 'pending' ? 'pending' : (item.status.risk === 'hit' ? 'hit' : (item.status.risk === 'clean' ? 'clean' : 'unknown'))}}" size="{{104}}" />
+            <text class="stamps__name">{{s[item.key]}}</text>
+            <text class="stamps__sum mono" wx:if="{{item.status.summary}}">{{item.status.summary}}</text>
+          </view>
+        </view>
+        <text class="note" wx:if="{{sources[0].status.state === 'pending'}}">{{s.id_src_note}}</text>
+      </view>
+    </view>
+
+    <view class="tabbar-space"></view>
+  </scroll-view>
+
+  <dj-tabbar current="tab_identity" />
+</view>

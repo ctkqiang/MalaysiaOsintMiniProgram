@@ -1,0 +1,96 @@
+@import "../../styles/shared.less";
+
+/* ---------- SSM 牌匾卡：泥金细框 ---------- */
+.plaque {
+  padding: 8rpx 0;
+}
+.plaque__frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2rpx solid var(--gold);
+  border-radius: 8rpx;
+  padding: 40rpx 32rpx;
+  background: var(--bg);
+}
+/* 外圈素纱细框，仿牌匾双层边 */
+.plaque__frame::after {
+  content: "";
+  position: absolute;
+  top: -8rpx;
+  left: -8rpx;
+  right: -8rpx;
+  bottom: -8rpx;
+  border: 1rpx solid var(--outline);
+  border-radius: 12rpx;
+  pointer-events: none;
+}
+.plaque__type {
+  font-size: 40rpx;
+  font-weight: 600;
+  letter-spacing: 6rpx;
+  color: var(--on-surface);
+}
+.plaque__typeen {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  letter-spacing: 2rpx;
+  color: var(--on-variant);
+}
+.plaque__rule {
+  width: 120rpx;
+  height: 2rpx;
+  background: var(--gold);
+  margin: 24rpx 0;
+}
+.plaque__no {
+  font-size: 34rpx;
+  letter-spacing: 6rpx;
+  color: var(--primary);
+}
+.plaque__meta {
+  margin-top: 14rpx;
+  font-size: 22rpx;
+  color: var(--on-variant);
+}
+
+/* ---------- 黄页结果 ---------- */
+.co {
+  display: flex;
+  flex-direction: column;
+  padding: 8rpx 0;
+}
+.co__name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--on-surface);
+}
+.co__line {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: var(--on-variant);
+  line-height: 1.7;
+  word-break: break-all;
+}
+
+/* ---------- 待接入交叉验证 ---------- */
+.yp-pending {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 0;
+}
+
+/* ---------- 黄页未命中 ---------- */
+.none {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 8rpx;
+}
+.none__text {
+  margin-left: 24rpx;
+  font-size: 26rpx;
+  color: var(--on-variant);
+  letter-spacing: 2rpx;
+}

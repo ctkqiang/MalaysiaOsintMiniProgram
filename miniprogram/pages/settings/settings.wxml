@@ -1,0 +1,89 @@
+<view class="{{themeClass}} page">
+  <dj-nav title="{{s.set_title}}" back="{{true}}" settings="{{false}}" />
+
+  <scroll-view class="body" scroll-y>
+    <!-- 主题：宣纸 / 夜墨 / 随系统 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <text class="card__title serif">{{s.set_theme}}</text>
+        <view class="opt-group">
+          <view class="opt serif {{themeMode === 'light' ? 'is-active' : ''}}" data-mode="light" bindtap="onTheme">{{s.set_theme_light}}</view>
+          <view class="opt serif {{themeMode === 'dark' ? 'is-active' : ''}}" data-mode="dark" bindtap="onTheme">{{s.set_theme_dark}}</view>
+          <view class="opt serif {{themeMode === 'system' ? 'is-active' : ''}}" data-mode="system" bindtap="onTheme">{{s.set_theme_system}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 语言：固定名不翻译，避免切错后找不到入口 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <text class="card__title serif">{{s.set_lang}}</text>
+        <view class="opt-group">
+          <view class="opt serif {{lang === 'zh' ? 'is-active' : ''}}" data-lang="zh" bindtap="onLang">中文</view>
+          <view class="opt serif {{lang === 'en' ? 'is-active' : ''}}" data-lang="en" bindtap="onLang">English</view>
+          <view class="opt serif {{lang === 'ms' ? 'is-active' : ''}}" data-lang="ms" bindtap="onLang">Bahasa Melayu</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 接入模式（直连政府接口 / 代理后端） -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <view class="row-between">
+          <text class="card__title serif set-inline-title">{{s.set_backend}}</text>
+          <text class="tag {{backendOn ? 'tag-on' : 'tag-off'}}">{{backendOn ? s.set_backend_on : s.set_backend_direct}}</text>
+        </view>
+        <text class="backend-url mono" wx:if="{{backendOn}}">{{backendUrl}}</text>
+        <text class="note" wx:else>{{s.common_direct_hint}}</text>
+      </view>
+    </view>
+
+    <!-- 订阅消息推送（BNM 警示通知） -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <view class="row-between">
+          <text class="card__title serif set-inline-title">{{s.set_push}}</text>
+          <text class="tag {{pushOn ? 'tag-on' : 'tag-pending'}}">{{pushOn ? s.set_push_on : s.set_push_off}}</text>
+        </view>
+        <text class="note">{{s.set_push_desc}}</text>
+        <text class="note" wx:if="{{!pushReady}}">{{s.set_push_pending}}</text>
+        <view class="opt serif action" bindtap="onPushToggle">{{pushOn ? s.set_push_off : s.set_push_on}}</view>
+      </view>
+    </view>
+
+    <!-- 免责声明确认重置 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <text class="card__title serif">{{s.set_reset_gate}}</text>
+        <view class="opt serif action" bindtap="onResetGate">{{s.set_reset_gate}}</view>
+      </view>
+    </view>
+
+    <!-- 关于 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <view class="about__head">
+          <dj-stamp risk="clean" size="{{72}}" label="鉴" />
+          <view class="about__text">
+            <text class="about__name serif">{{s.app_name}}</text>
+            <text class="about__slogan">{{s.app_slogan}}</text>
+          </view>
+        </view>
+        <view class="hairline about__line"></view>
+        <view class="row-between">
+          <text class="about__label">{{s.set_version}}</text>
+          <text class="about__value mono">v1.0.0</text>
+        </view>
+        <text class="note">{{s.common_disclaimer}}</text>
+      </view>
+    </view>
+
+    <view class="tabbar-space"></view>
+  </scroll-view>
+</view>

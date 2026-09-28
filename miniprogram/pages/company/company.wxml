@@ -1,0 +1,73 @@
+<view class="{{themeClass}} page">
+  <dj-nav title="{{s.co_title}}" back="{{true}}" settings="{{true}}" />
+
+  <scroll-view class="body" scroll-y>
+    <!-- 界格输入 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <text class="card__title serif">{{s.co_title}}</text>
+        <view class="field">
+          <input
+            class="field__input mono"
+            type="number"
+            maxlength="14"
+            value="{{query}}"
+            placeholder="{{s.co_ph}}"
+            placeholder-class="field__ph"
+            bindinput="onQueryInput"
+            confirm-type="search"
+            bindconfirm="onSearch"
+          />
+          <view class="field__btn serif {{loading ? 'is-disabled' : ''}}" bindtap="onSearch">{{s.co_btn}}</view>
+        </view>
+        <text class="err" wx:if="{{errMsg}}">{{errMsg}}</text>
+        <dj-ink show="{{loading}}" text="{{s.co_btn}}" />
+      </view>
+    </view>
+
+    <!-- SSM 牌匾卡 -->
+    <view class="card" wx:if="{{ssm}}">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <view class="row-between">
+          <text class="card__title serif">SSM</text>
+          <text class="link" data-text="{{ssm.registrationNumber}}" bindtap="onCopy">{{s.common_copy}}</text>
+        </view>
+        <view class="plaque">
+          <view class="plaque__frame">
+            <text class="plaque__type serif">{{ssm.entityTypeCn}}</text>
+            <text class="plaque__typeen">{{ssm.entityType}}</text>
+            <view class="plaque__rule"></view>
+            <text class="plaque__no mono">{{ssm.registrationNumber}}</text>
+            <text class="plaque__meta">{{s.co_entity_code}} {{ssm.entityCode}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 黄页 + 反诈交叉验证 -->
+    <view class="card" wx:if="{{company || notFound}}">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <text class="card__title serif">{{s.co_yp_title}}</text>
+        <block wx:if="{{company}}">
+          <view class="co">
+            <text class="co__name serif">{{company.name}}</text>
+            <text class="co__line">{{company.category}}</text>
+            <text class="co__line">{{company.address}}</text>
+            <text class="co__line mono" wx:if="{{company.website}}">{{company.website}}</text>
+          </view>
+        </block>
+        <view class="none" wx:else>
+          <dj-stamp risk="unknown" size="{{72}}" />
+          <text class="none__text">{{failed ? s.home_risk_unknown : s.co_no_result}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="tabbar-space"></view>
+  </scroll-view>
+
+  <dj-tabbar current="tab_company" />
+</view>

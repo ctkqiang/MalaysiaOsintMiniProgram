@@ -1,0 +1,99 @@
+@import "../../styles/shared.less";
+
+/* ---------- 选项分组（分段胶囊，选中黛青底） ---------- */
+.opt-group {
+  display: flex;
+  border: 1rpx solid var(--outline);
+  border-radius: 8rpx;
+  overflow: hidden;
+  background: var(--bg);
+}
+.opt {
+  flex: 1;
+  text-align: center;
+  padding: 22rpx 0;
+  font-size: 26rpx;
+  letter-spacing: 2rpx;
+  color: var(--on-variant);
+  border-right: 1rpx solid var(--outline);
+}
+.opt:last-child {
+  border-right: none;
+}
+.opt.is-active {
+  background: var(--primary);
+  color: #FDFCF8;
+}
+
+/* 行内标题（与状态标签同行，去掉卡片标题默认下边距） */
+.set-inline-title {
+  margin-bottom: 0;
+}
+
+/* 后端状态标签 */
+.tag {
+  font-size: 22rpx;
+  border-radius: 6rpx;
+  padding: 4rpx 12rpx;
+}
+.tag-on {
+  color: var(--success);
+  border: 1rpx solid var(--success);
+}
+.tag-off {
+  color: var(--info);
+  border: 1rpx solid var(--info);
+}
+.tag-pending {
+  color: var(--gold);
+  border: 1rpx solid var(--gold);
+}
+.backend-url {
+  display: block;
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: var(--on-surface);
+  word-break: break-all;
+}
+
+/* 动作行（重置免责门） */
+.action {
+  text-align: center;
+  border: 1rpx solid var(--primary);
+  border-radius: 8rpx;
+  color: var(--primary);
+}
+
+/* ---------- 关于 ---------- */
+.about__head {
+  display: flex;
+  align-items: center;
+}
+.about__text {
+  margin-left: 24rpx;
+  display: flex;
+  flex-direction: column;
+}
+.about__name {
+  font-size: 34rpx;
+  font-weight: 600;
+  letter-spacing: 4rpx;
+  color: var(--on-surface);
+}
+.about__slogan {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: var(--on-variant);
+  letter-spacing: 2rpx;
+}
+.about__line {
+  margin: 28rpx 0;
+}
+.about__label {
+  font-size: 26rpx;
+  color: var(--on-variant);
+}
+.about__value {
+  font-size: 26rpx;
+  color: var(--on-surface);
+}

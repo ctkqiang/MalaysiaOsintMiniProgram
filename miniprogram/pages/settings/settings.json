@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "dj-nav": "/components/dj-nav/dj-nav",
+    "dj-stamp": "/components/dj-stamp/dj-stamp"
+  }
+}

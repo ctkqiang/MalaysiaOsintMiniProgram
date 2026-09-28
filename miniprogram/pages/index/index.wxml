@@ -1,0 +1,132 @@
+<view class="{{themeClass}} page">
+  <dj-nav title="{{s.home_title}}" back="{{false}}" settings="{{true}}" />
+
+  <scroll-view class="body" scroll-y>
+    <!-- 今日鉴徽记 -->
+    <view class="hero">
+      <dj-stamp risk="clean" size="{{112}}" label="鉴" />
+      <view class="hero__text">
+        <text class="hero__title serif">{{s.app_name}}</text>
+        <text class="hero__slogan">{{s.app_slogan}}</text>
+      </view>
+    </view>
+
+    <!-- 反诈查询：界格输入框 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <text class="card__title serif">{{s.home_semak_btn}}</text>
+        <view class="field">
+          <input
+            class="field__input mono"
+            type="text"
+            value="{{query}}"
+            placeholder="{{s.home_semak_ph}}"
+            placeholder-class="field__ph"
+            bindinput="onQueryInput"
+            confirm-type="search"
+            bindconfirm="onSearch"
+          />
+          <view class="field__btn serif {{loading ? 'is-disabled' : ''}}" bindtap="onSearch">{{s.home_semak_btn}}</view>
+        </view>
+
+        <dj-ink show="{{loading}}" text="{{s.home_semak_btn}}" />
+
+        <!-- 结果：风险结论印章 -->
+        <block wx:if="{{result}}">
+          <view class="result">
+            <dj-stamp wx:if="{{result.risk === 'hit'}}" risk="hit" size="{{88}}" />
+            <dj-stamp wx:else risk="clean" size="{{88}}" />
+            <view class="result__text">
+              <text class="result__main serif" wx:if="{{result.risk === 'hit'}}">{{s.home_risk_hit}}（{{result.count}}）</text>
+              <text class="result__main serif" wx:else>{{s.home_risk_clean}}</text>
+            </view>
+          </view>
+
+          <!-- 命中明细：界格表格 -->
+          <view class="grid" wx:if="{{result.rows.length > 0}}">
+            <view class="grid__row" wx:for="{{result.rows}}" wx:key="index" wx:for-item="row">
+              <view class="grid__cell mono" wx:for="{{row}}" wx:key="index" data-text="{{item}}" bindtap="onCopy">{{item}}</view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- BNM 警示名单：卷轴式列表 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <view class="row-between">
+          <text class="card__title serif">{{s.home_bnm_title}}</text>
+          <text class="link" wx:if="{{bnmLoaded && bnmFailed}}" bindtap="loadBnm">{{s.home_bnm_retry}}</text>
+        </view>
+        <view class="bnm" wx:if="{{bnm.length > 0}}">
+          <block wx:for="{{bnm}}" wx:key="name">
+            <view class="bnm__item">
+              <text class="bnm__name">{{item.name}}</text>
+              <text class="bnm__meta mono">{{item.website}} · {{item.date}}</text>
+            </view>
+            <view class="hairline" wx:if="{{index < bnm.length - 1}}"></view>
+          </block>
+        </view>
+        <view class="empty" wx:else>
+          <view class="empty__cloud"></view>
+          <text class="empty__text">{{bnmFailed ? s.home_bnm_failed : s.home_bnm_empty}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最近查询 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <view class="row-between">
+          <text class="card__title serif">{{s.home_history_title}}</text>
+          <text class="link" bindtap="onClearHistory" wx:if="{{history.length > 0}}">{{s.common_clear_history}}</text>
+        </view>
+        <view wx:if="{{history.length > 0}}">
+          <block wx:for="{{history}}" wx:key="id">
+            <view class="hist">
+              <dj-stamp risk="{{item.risk}}" size="{{52}}" />
+              <view class="hist__mid">
+                <text class="hist__q mono">{{item.query}}</text>
+                <text class="hist__risk">{{item.riskText}}</text>
+              </view>
+            </view>
+            <view class="hairline" wx:if="{{index < history.length - 1}}"></view>
+          </block>
+        </view>
+        <view class="empty" wx:else>
+          <view class="empty__cloud"></view>
+          <text class="empty__text">{{s.home_history_empty}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 快捷入口 -->
+    <view class="quick">
+      <view class="quick__item serif" bindtap="goIdentity">{{s.id_title}} ›</view>
+      <view class="quick__item serif" bindtap="goCompany">{{s.co_title}} ›</view>
+    </view>
+    <view class="quick">
+      <view class="quick__item serif" bindtap="goSocial">{{s.tab_social}} ›</view>
+      <view class="quick__item serif" bindtap="goCourt">{{s.tab_court}} ›</view>
+    </view>
+
+    <text class="disclaimer">{{s.common_disclaimer}}</text>
+    <view class="tabbar-space"></view>
+  </scroll-view>
+
+  <dj-tabbar current="tab_home" />
+
+  <!-- 免责声明确认门 -->
+  <view class="mask" wx:if="{{showDisclaimer}}">
+    <view class="dialog">
+      <dj-stamp risk="unknown" size="{{96}}" label="鉴" />
+      <text class="dialog__title serif">{{s.app_name}}</text>
+      <text class="dialog__body">{{s.common_disclaimer}}</text>
+      <view class="dialog__btn serif" bindtap="onAcceptDisclaimer">OK · {{s.app_slogan}}</view>
+    </view>
+  </view>
+</view>
