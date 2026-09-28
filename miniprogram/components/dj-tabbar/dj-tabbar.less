@@ -1,0 +1,42 @@
+@import "../../styles/theme.less";
+
+.dj-tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  background: var(--surface);
+  border-top: 1rpx solid var(--outline);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.dj-tabbar__inner {
+  display: flex;
+  height: 112rpx;
+}
+.dj-tabbar__item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dj-tabbar__pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10rpx 20rpx;
+  border-radius: 999rpx;
+}
+.dj-tabbar__label {
+  font-size: 26rpx;
+  color: var(--on-variant);
+  white-space: nowrap;
+}
+/* 选中态：黛青胶囊 + 宋体加粗 */
+.is-active .dj-tabbar__pill {
+  background: var(--primary-container);
+}
+.is-active .dj-tabbar__label {
+  color: var(--primary);
+  font-weight: 600;
+}

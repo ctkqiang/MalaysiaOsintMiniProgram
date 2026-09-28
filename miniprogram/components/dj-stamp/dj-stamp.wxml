@@ -1,0 +1,4 @@
+<view class="{{themeClass}} dj-stamp risk--{{risk}}" style="width: {{size}}rpx; height: {{size}}rpx; border-width: {{size / 24}}rpx;">
+  <view class="dj-stamp__ring" style="top: {{size / 16}}rpx; left: {{size / 16}}rpx; right: {{size / 16}}rpx; bottom: {{size / 16}}rpx; border-width: {{size / 48}}rpx;"></view>
+  <text class="dj-stamp__glyph serif" style="font-size: {{fontSize}}rpx;">{{label || glyph}}</text>
+</view>

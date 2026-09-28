@@ -1,0 +1,61 @@
+@import "../../styles/theme.less";
+
+.dj-nav {
+  background: var(--surface);
+}
+.dj-nav__status {
+  width: 100%;
+}
+.dj-nav__bar {
+  display: flex;
+  align-items: center;
+  height: 88rpx;
+  padding: 0 24rpx;
+}
+.dj-nav__left {
+  width: 120rpx;
+}
+.dj-nav__back {
+  font-size: 56rpx;
+  color: var(--on-surface);
+  line-height: 1;
+  padding: 0 16rpx;
+}
+.dj-nav__center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.dj-nav__title {
+  font-size: 34rpx;
+  font-weight: 600;
+  letter-spacing: 6rpx;
+  color: var(--on-surface);
+  line-height: 1.4;
+}
+/* 题字下的一条黛青细线，如批注界栏 */
+.dj-nav__underline {
+  width: 64rpx;
+  height: 4rpx;
+  background: var(--primary);
+  border-radius: 2rpx;
+  margin-top: 4rpx;
+}
+.dj-nav__right {
+  width: 120rpx;
+  display: flex;
+  justify-content: flex-end;
+}
+/* 印章式设置入口 */
+.dj-nav__seal {
+  width: 56rpx;
+  height: 56rpx;
+  border: 2rpx solid var(--gold);
+  border-radius: 10rpx;
+  color: var(--gold);
+  font-size: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

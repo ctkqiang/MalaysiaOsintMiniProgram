@@ -1,0 +1,16 @@
+<view class="{{themeClass}} dj-tabbar">
+  <view class="dj-tabbar__inner">
+    <view
+      wx:for="{{items}}"
+      wx:key="key"
+      class="dj-tabbar__item {{current === item.key ? 'is-active' : ''}}"
+      data-path="{{item.path}}"
+      bindtap="onTap"
+      hover-class="none"
+    >
+      <view class="dj-tabbar__pill">
+        <text class="dj-tabbar__label serif">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+</view>

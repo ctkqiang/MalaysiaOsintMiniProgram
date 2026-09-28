@@ -1,0 +1,8 @@
+<view class="{{themeClass}} dj-ink" wx:if="{{show}}">
+  <view class="dj-ink__drops">
+    <view class="dj-ink__drop drop-1"></view>
+    <view class="dj-ink__drop drop-2"></view>
+    <view class="dj-ink__drop drop-3"></view>
+  </view>
+  <text class="dj-ink__text serif" wx:if="{{text}}">{{text}}</text>
+</view>

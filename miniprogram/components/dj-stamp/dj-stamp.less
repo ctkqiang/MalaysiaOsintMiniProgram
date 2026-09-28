@@ -1,0 +1,48 @@
+@import "../../styles/theme.less";
+
+/* 仿金石篆刻：双层描边 + 圆润转角，颜色全部走语义变量 */
+.dj-stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 4rpx solid var(--stamp-color);
+  border-radius: 12rpx;
+  position: relative;
+}
+.dj-stamp__ring {
+  position: absolute;
+  top: 6rpx;
+  left: 6rpx;
+  right: 6rpx;
+  bottom: 6rpx;
+  border: 2rpx solid var(--stamp-color);
+  border-radius: 8rpx;
+  opacity: 0.55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dj-stamp__glyph {
+  font-size: 48rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+  line-height: 1;
+  color: var(--stamp-color);
+}
+
+/* 朱砂方印（高风险命中） */
+.risk--hit { --stamp-color: var(--danger); }
+/* 竹青圆印（干净） */
+.risk--clean {
+  --stamp-color: var(--success);
+  border-radius: 50%;
+}
+.risk--clean .dj-stamp__ring { border-radius: 50%; }
+/* 素纱方印（无法判定） */
+.risk--unknown { --stamp-color: var(--pending); }
+/* 泥金空心印（待接入） */
+.risk--pending {
+  --stamp-color: var(--gold);
+  opacity: 0.9;
+}

@@ -1,0 +1,142 @@
+/* 页面级共享结构样式：界格卡片 / 界格输入 / 空态 / 布局骨架 */
+@import "./theme.less";
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg);
+}
+.body {
+  flex: 1;
+  overflow: hidden;
+}
+.tabbar-space {
+  height: 140rpx;
+}
+
+/* ---------- 界格卡片：左侧 6rpx 黛青竖线，如批注界栏 ---------- */
+.card {
+  display: flex;
+  margin: 0 32rpx 28rpx;
+  background: var(--surface);
+  border: 1rpx solid var(--outline);
+  border-radius: 8rpx;
+}
+.card__rail {
+  width: 6rpx;
+  background: var(--primary);
+  border-radius: 8rpx 0 0 8rpx;
+  margin: 20rpx 0;
+}
+.card__body {
+  flex: 1;
+  padding: 32rpx;
+}
+.card__title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--on-surface);
+  letter-spacing: 2rpx;
+  display: block;
+  margin-bottom: 24rpx;
+}
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tag-pending {
+  font-size: 22rpx;
+  color: var(--gold);
+  border: 1rpx solid var(--gold);
+  border-radius: 6rpx;
+  padding: 4rpx 12rpx;
+}
+
+/* ---------- 界格输入框 ---------- */
+.field {
+  display: flex;
+  align-items: stretch;
+  border: 1rpx solid var(--outline);
+  border-radius: 8rpx;
+  overflow: hidden;
+  background: var(--bg);
+}
+.field__input {
+  flex: 1;
+  height: 88rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: var(--on-surface);
+}
+.field__ph {
+  color: var(--on-variant);
+  font-size: 26rpx;
+}
+.field__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 36rpx;
+  background: var(--primary);
+  color: #FDFCF8;
+  font-size: 28rpx;
+  letter-spacing: 4rpx;
+  border-left: 1rpx solid var(--outline);
+}
+.field__btn.is-disabled {
+  opacity: 0.6;
+}
+
+.err {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: var(--danger);
+}
+.link {
+  font-size: 24rpx;
+  color: var(--info);
+}
+.note {
+  display: block;
+  margin-top: 24rpx;
+  font-size: 22rpx;
+  color: var(--on-variant);
+  line-height: 1.7;
+}
+
+/* ---------- 云纹空态 ---------- */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48rpx 0;
+}
+.empty__cloud {
+  width: 96rpx;
+  height: 36rpx;
+  border: 2rpx solid var(--outline);
+  border-bottom: none;
+  border-radius: 48rpx 48rpx 0 0;
+  position: relative;
+}
+.empty__cloud::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -22rpx;
+  width: 44rpx;
+  height: 22rpx;
+  margin-left: -22rpx;
+  border: 2rpx solid var(--outline);
+  border-bottom: none;
+  border-radius: 22rpx 22rpx 0 0;
+}
+.empty__text {
+  margin-top: 24rpx;
+  font-size: 24rpx;
+  color: var(--on-variant);
+  letter-spacing: 2rpx;
+}

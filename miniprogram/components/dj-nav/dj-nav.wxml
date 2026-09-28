@@ -1,0 +1,15 @@
+<view class="{{themeClass}} dj-nav">
+  <view class="dj-nav__status" style="height: {{statusBarHeight}}px;"></view>
+  <view class="dj-nav__bar">
+    <view class="dj-nav__left">
+      <view wx:if="{{back}}" class="dj-nav__back serif" bindtap="onBack">‹</view>
+    </view>
+    <view class="dj-nav__center">
+      <text class="dj-nav__title serif">{{title}}</text>
+      <view class="dj-nav__underline"></view>
+    </view>
+    <view class="dj-nav__right">
+      <view wx:if="{{settings}}" class="dj-nav__seal serif" bindtap="onSettings">鉴</view>
+    </view>
+  </view>
+</view>

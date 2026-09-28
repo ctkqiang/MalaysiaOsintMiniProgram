@@ -1,0 +1,32 @@
+@import "../../styles/theme.less";
+
+.dj-ink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32rpx 0;
+}
+.dj-ink__drops {
+  position: relative;
+  width: 120rpx;
+  height: 120rpx;
+}
+.dj-ink__drop {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 96rpx;
+  height: 96rpx;
+  margin: -48rpx 0 0 -48rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle at 45% 40%, var(--primary), var(--ink-bg) 75%);
+  animation: dj-ink 1.8s ease-out infinite;
+}
+.drop-2 { animation-delay: 0.6s; }
+.drop-3 { animation-delay: 1.2s; }
+.dj-ink__text {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: var(--on-variant);
+  letter-spacing: 4rpx;
+}

@@ -1,0 +1,70 @@
+/* ============================================================
+ * 「丹青鉴」设计 Token（小程序版）
+ * 每个页面/组件的根节点挂 .th-light 或 .th-dark，
+ * CSS 变量在该节点内向下继承，跨组件树各自挂载同名类。
+ * ============================================================ */
+
+/* 浅色模式「宣纸」 */
+.th-light {
+  --primary: #2B4C7E;          /* 黛青 */
+  --primary-container: #E3EAF4; /* 月白 */
+  --bg: #F6F3EC;               /* 宣纸 */
+  --surface: #FDFCF8;          /* 绢本 */
+  --on-surface: #26292E;       /* 玄墨 */
+  --on-variant: #6B6F76;       /* 淡墨 */
+  --outline: #DDD8CC;          /* 素纱 */
+  --danger: #A63A2B;           /* 朱砂 */
+  --warning: #A8763E;          /* 赭石 */
+  --success: #4E7A51;          /* 竹青 */
+  --info: #3A6B8C;             /* 黛蓝 */
+  --gold: #B08D57;             /* 泥金 */
+  --pending: #8A8F98;          /* 待接入灰 */
+  --ink-bg: rgba(43, 76, 126, 0.06);
+}
+
+/* 深色模式「夜墨」 */
+.th-dark {
+  --primary: #8FB0DC;
+  --primary-container: #2A3B55;
+  --bg: #14171C;               /* 玄夜 */
+  --surface: #1D2128;          /* 墨石 */
+  --on-surface: #E8E6E0;       /* 霜白 */
+  --on-variant: #9AA0A8;
+  --outline: #343A43;
+  --danger: #E08072;
+  --warning: #D9AC6A;
+  --success: #8FBF92;
+  --info: #7FA8C4;
+  --gold: #C9A468;
+  --pending: #6E747D;
+  --ink-bg: rgba(143, 176, 220, 0.08);
+}
+
+/* ---------- 字体层级 ---------- */
+.serif {
+  /* 思源宋体不可内嵌时的系统衬线回退：iOS Songti SC / Android Noto Serif */
+  font-family: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+}
+.mono {
+  font-family: "JetBrains Mono", "Menlo", "Courier New", monospace;
+}
+
+/* ---------- 通用结构 ---------- */
+.hairline {
+  height: 1rpx;
+  background: var(--outline);
+  margin: 0 32rpx;
+}
+
+/* ---------- 动效 ---------- */
+/* 水墨加载：墨滴入水，半径扩散 + 透明度衰减 */
+@keyframes dj-ink {
+  0% {
+    transform: scale(0.2);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
