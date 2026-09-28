@@ -466,24 +466,72 @@ function docIdOf(it: Record<string, unknown>): string {
   if (Array.isArray(list) && list.length > 0) {
     const first = list[0] as Record<string, unknown>
     const id = pick(first, 'DocumentID', 'documentId', 'DocumentId')
-    if (id) return id
+    // .NET 全零 GUID 表示无文书
+    if (id && id.indexOf('00000000-0000-0000-0000-000000000000') === -1) return id
   }
-  return pick(it, 'documentId', 'eJudgUniqueID')
+  const fallback = pick(it, 'documentId', 'eJudgUniqueID')
+  return fallback && fallback.indexOf('00000000-0000-0000-0000-000000000000') === -1 ? fallback : ''
+}
+
+/** .NET ASMX 日期 /Date(1785211750000)/ → YYYY-MM-DD；非该格式则清洗后原样返回 */
+export function foldNetDate(s: string): string {
+  const cleaned = stripHtml(s)
+  const m = /^\/?Date\((-?\d+)\)\/?$/.exec(cleaned)
+  if (!m) return cleaned
+  const ms = parseInt(m[1], 10)
+  if (isNaN(ms)) return cleaned
+  const dt = new Date(ms)
+  const mm = dt.getMonth() + 1
+  const dd = dt.getDate()
+  return dt.getFullYear() + '-' + (mm < 10 ? '0' + mm : '' + mm) + '-' + (dd < 10 ? '0' + dd : '' + dd)
+}
+
+/** 案号尾部括号里的法院名（如 "BA-22M-201-06/2024(Mahkamah Tinggi)"）提取为徽章 */
+function splitCourt(caseNo: string): { caseNo: string; court: string } {
+  const m = /^(.*?)[（(]\s*([^（()）]+?)\s*[)）]\s*$/.exec(caseNo)
+  if (m && m[2]) {
+    return { caseNo: m[1].trim(), court: m[2].trim() }
+  }
+  return { caseNo, court: '' }
+}
+
+/** 当事人字段：换行转段落，角色行与人名行合并，避免 PLAINTIFSMALL… 粘连 */
+function foldParties(s: string): string {
+  const lines = blockLines((s || '').replace(/<br\s*\/?>/gi, '\n'))
+  if (lines.length === 0) return ''
+  // 原版结构常为：角色行（PLAINTIF/RESPONDEN/PERAYU）+ 人名行，交替合并
+  const merged: string[] = []
+  for (let i = 0; i < lines.length; i++) {
+    const cur = lines[i]
+    const next = lines[i + 1]
+    if (next && /^(plaintif|plaintiff|responden|defendan|defendant|perayu|terrayu|pendakwa|pemohon|termohon)/i.test(cur)) {
+      merged.push(cur + '：' + next)
+      i++
+    } else {
+      merged.push(cur)
+    }
+  }
+  return merged.join('；')
 }
 
 /** 后端/信封数据 → 前端展示模型（兼容原版 ASMX 字段名与简化字段名） */
 export function foldECourt(d: ECourtRemoteParam | undefined): ECourtResult {
   const rawItems = d && Array.isArray(d.items) ? d.items : []
-  const items: ECourtItem[] = rawItems.map((it) => ({
-    caseNo: stripHtml(pick(it, 'CaseNo', 'caseNo')),
-    parties: stripHtml(pick(it, 'Parties', 'parties')),
-    keyWord: stripHtml(pick(it, 'KeyWord', 'keyWord')),
-    dateOfAp: stripHtml(pick(it, 'DateOfAP', 'dateOfAp')),
-    dateOfResult: stripHtml(pick(it, 'DateOfResult', 'dateOfResult')),
-    judge: stripHtml(pick(it, 'Judge', 'judge')),
-    corumJudge: stripHtml(pick(it, 'CorumJudge', 'corumJudge')),
-    documentId: docIdOf(it),
-  }))
+  const items: ECourtItem[] = rawItems.map((it) => {
+    const rawCaseNo = stripHtml(pick(it, 'CaseNo', 'caseNo'))
+    const sc = splitCourt(rawCaseNo)
+    return {
+      caseNo: sc.caseNo,
+      court: sc.court,
+      parties: foldParties(pick(it, 'Parties', 'parties')),
+      keyWord: stripHtml(pick(it, 'KeyWord', 'keyWord')),
+      dateOfAp: foldNetDate(pick(it, 'DateOfAP', 'dateOfAp')),
+      dateOfResult: foldNetDate(pick(it, 'DateOfResult', 'dateOfResult')),
+      judge: stripHtml(pick(it, 'Judge', 'judge')),
+      corumJudge: stripHtml(pick(it, 'CorumJudge', 'corumJudge')),
+      documentId: docIdOf(it),
+    }
+  })
   return {
     totalRecord: d && typeof d.totalRecord === 'number' ? d.totalRecord : items.length,
     totalPage: d && typeof d.totalPage === 'number' ? d.totalPage : 1,

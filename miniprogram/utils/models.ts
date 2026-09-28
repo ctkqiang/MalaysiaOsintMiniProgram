@@ -69,6 +69,8 @@ export interface SourceStatus {
 /** e-Court 判决书列表条目（字段对齐原版 ECourtItem 清洗后语义） */
 export interface ECourtItem {
   caseNo: string
+  /** 从案号尾部括号提取的法院名 */
+  court: string
   parties: string
   keyWord: string
   dateOfAp: string

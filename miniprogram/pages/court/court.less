@@ -79,25 +79,34 @@
 }
 .case {
   padding: 24rpx;
+  min-width: 0;
 }
 .case__head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 .case__idx {
   font-size: 22rpx;
   color: var(--on-variant);
   margin-right: 16rpx;
   flex-shrink: 0;
+  line-height: 1.6;
 }
 .case__kw {
   flex: 1;
+  min-width: 0;
   font-size: 28rpx;
   font-weight: 600;
   color: var(--on-surface);
+  line-height: 1.6;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.case__kw.is-expand {
+  -webkit-line-clamp: initial;
+  display: block;
 }
 .case__pdf {
   flex-shrink: 0;
@@ -109,25 +118,59 @@
   border: 1rpx solid var(--danger);
   border-radius: 6rpx;
 }
+
+/* 法院徽章：泥金细框 */
+.case__badges {
+  margin-top: 14rpx;
+}
+.case__court {
+  display: inline-block;
+  font-size: 20rpx;
+  letter-spacing: 2rpx;
+  color: var(--gold);
+  border: 1rpx solid var(--gold);
+  border-radius: 6rpx;
+  padding: 4rpx 14rpx;
+}
+
 .case__rows {
   margin-top: 16rpx;
 }
 .case__row {
   display: flex;
   margin-top: 10rpx;
+  min-width: 0;
 }
 .case__label {
-  width: 160rpx;
+  width: 150rpx;
   flex-shrink: 0;
   font-size: 22rpx;
   color: var(--on-variant);
+  line-height: 1.6;
 }
 .case__value {
   flex: 1;
+  min-width: 0;
   font-size: 24rpx;
   color: var(--on-surface);
+  line-height: 1.6;
   word-break: break-all;
 }
 .case__line {
   margin: 20rpx 0 0;
+}
+
+/* 下一页 */
+.more {
+  margin-top: 24rpx;
+  text-align: center;
+  padding: 22rpx 0;
+  font-size: 26rpx;
+  letter-spacing: 4rpx;
+  color: var(--primary);
+  border: 1rpx solid var(--primary);
+  border-radius: 8rpx;
+}
+.more.is-disabled {
+  opacity: 0.5;
 }

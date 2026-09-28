@@ -7,8 +7,9 @@ import { ECourtResult, HistoryEntry } from '../../utils/models'
 
 const S = [
   'ct_title', 'ct_ph', 'ct_btn', 'ct_result', 'ct_no_result', 'ct_judge',
-  'ct_date_ap', 'ct_date_result', 'ct_parties', 'ct_pdf', 'ct_doc_hint',
-  'ct_total', 'ct_matched', 'ct_page', 'ct_failed', 'ct_domain_hint', 'co_regno',
+  'ct_case_no', 'ct_dates', 'ct_parties', 'ct_pdf', 'ct_doc_hint',
+  'ct_total', 'ct_matched', 'ct_page', 'ct_failed', 'ct_domain_hint',
+  'ct_more', 'ct_loading',
   'home_history_title',
   'common_copy', 'common_copied',
 ]
@@ -23,6 +24,7 @@ Component({
     result: null as ECourtResult | null,
     errMsg: '',
     recent: [] as HistoryEntry[],
+    expandIdx: -1,
   },
 
   lifetimes: {
@@ -64,29 +66,50 @@ Component({
     },
 
     async onSearch() {
+      this.doSearch(1, false)
+    },
+
+    /** 下一页：结果累加展示 */
+    onMorePage() {
+      const r = this.data.result
+      if (!r || this.data.loading || r.currPage >= r.totalPage) return
+      this.doSearch(r.currPage + 1, true)
+    },
+
+    async doSearch(page: number, append: boolean) {
       const q = (this.data.query || '').trim()
       if (!q) {
         this.setData({ errMsg: this.data.s.ct_ph })
         return
       }
       this.setData({ loading: true, errMsg: '', searched: true })
-      const res = await ecourtSearch(q, 1)
+      const res = await ecourtSearch(q, page)
       if (res.state !== 'ok' || !res.data) {
         // 透出具体失败原因（域名拦截 / 超时 / HTTP 码），便于真机定位
         const detail = res.message || ''
         const blocked = detail.indexOf('domain') !== -1
         this.setData({
           loading: false,
-          result: null,
           errMsg: (blocked ? this.data.s.ct_domain_hint : this.data.s.ct_failed) + (detail ? '（' + detail + '）' : ''),
         })
         return
       }
       const folded = foldECourt(res.data)
-      const risk = folded.items.length > 0 ? 'hit' : 'clean'
-      this.setData({ loading: false, result: folded })
-      addHistory('court', q, risk)
-      this.loadRecent()
+      if (append && this.data.result) {
+        const prev = this.data.result
+        folded.items = prev.items.concat(folded.items)
+      }
+      this.setData({ loading: false, result: folded, expandIdx: -1 })
+      if (!append) {
+        addHistory('court', q, folded.items.length > 0 ? 'hit' : 'clean')
+        this.loadRecent()
+      }
+    },
+
+    /** 关键词两行截断，点击展开/收起 */
+    onToggleExpand(e: WechatMiniprogram.TouchEvent) {
+      const i = Number(e.currentTarget.dataset.i)
+      this.setData({ expandIdx: this.data.expandIdx === i ? -1 : i })
     },
 
     onOpenDoc(e: WechatMiniprogram.TouchEvent) {

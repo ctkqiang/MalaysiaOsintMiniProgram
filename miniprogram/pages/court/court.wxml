@@ -68,37 +68,41 @@
 
           <!-- 判决书列表：界格表格 -->
           <view class="grid" wx:else>
-              <view class="case" wx:for="{{result.items}}" wx:key="index" wx:for-item="c">
-                <view class="case__head">
-                  <text class="case__idx serif">#{{index + 1}}</text>
-                  <text class="case__kw">{{c.keyWord || c.caseNo}}</text>
-                  <view class="case__pdf serif" wx:if="{{c.documentId}}" data-id="{{c.documentId}}" bindtap="onOpenDoc">{{s.ct_pdf}}</view>
-                </view>
-                <view class="case__rows">
-                  <view class="case__row" wx:if="{{c.caseNo}}">
-                    <text class="case__label">{{s.co_regno}}</text>
-                    <text class="case__value mono" data-text="{{c.caseNo}}" bindtap="onCopy">{{c.caseNo}}</text>
-                  </view>
-                  <view class="case__row" wx:if="{{c.parties}}">
-                    <text class="case__label">{{s.ct_parties}}</text>
-                    <text class="case__value">{{c.parties}}</text>
-                  </view>
-                  <view class="case__row" wx:if="{{c.corumJudge}}">
-                    <text class="case__label">{{s.ct_judge}}</text>
-                    <text class="case__value">{{c.corumJudge}}</text>
-                  </view>
-                  <view class="case__row" wx:if="{{c.dateOfAp}}">
-                    <text class="case__label">{{s.ct_date_ap}}</text>
-                    <text class="case__value mono">{{c.dateOfAp}}</text>
-                  </view>
-                  <view class="case__row" wx:if="{{c.dateOfResult}}">
-                    <text class="case__label">{{s.ct_date_result}}</text>
-                    <text class="case__value mono">{{c.dateOfResult}}</text>
-                  </view>
-                </view>
-                <view class="hairline case__line" wx:if="{{index < result.items.length - 1}}"></view>
+            <view class="case" wx:for="{{result.items}}" wx:key="index" wx:for-item="c">
+              <view class="case__head">
+                <text class="case__idx serif">#{{index + 1}}</text>
+                <text class="case__kw {{expandIdx === index ? 'is-expand' : ''}}" data-i="{{index}}" bindtap="onToggleExpand">{{c.keyWord || c.caseNo}}</text>
+                <view class="case__pdf serif" wx:if="{{c.documentId}}" data-id="{{c.documentId}}" bindtap="onOpenDoc">{{s.ct_pdf}}</view>
               </view>
+              <view class="case__badges" wx:if="{{c.court}}">
+                <text class="case__court serif">{{c.court}}</text>
+              </view>
+              <view class="case__rows">
+                <view class="case__row" wx:if="{{c.caseNo}}">
+                  <text class="case__label">{{s.ct_case_no}}</text>
+                  <text class="case__value mono" data-text="{{c.caseNo}}" bindtap="onCopy">{{c.caseNo}}</text>
+                </view>
+                <view class="case__row" wx:if="{{c.parties}}">
+                  <text class="case__label">{{s.ct_parties}}</text>
+                  <text class="case__value">{{c.parties}}</text>
+                </view>
+                <view class="case__row" wx:if="{{c.corumJudge}}">
+                  <text class="case__label">{{s.ct_judge}}</text>
+                  <text class="case__value">{{c.corumJudge}}</text>
+                </view>
+                <view class="case__row" wx:if="{{c.dateOfAp || c.dateOfResult}}">
+                  <text class="case__label">{{s.ct_dates}}</text>
+                  <text class="case__value mono">{{c.dateOfAp}}{{c.dateOfAp && c.dateOfResult ? ' → ' : ''}}{{c.dateOfResult}}</text>
+                </view>
+              </view>
+              <view class="hairline case__line" wx:if="{{index < result.items.length - 1}}"></view>
             </view>
+          </view>
+
+          <!-- 下一页 -->
+          <view class="more serif {{loading ? 'is-disabled' : ''}}" wx:if="{{result.items.length > 0 && result.currPage < result.totalPage}}" bindtap="onMorePage">
+            {{loading ? s.ct_loading : s.ct_more}}
+          </view>
         </view>
       </view>
     </block>
