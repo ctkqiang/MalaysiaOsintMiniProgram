@@ -1,0 +1,15 @@
+# 依赖与构建产物
+node_modules/
+miniprogram_npm/
+
+# 本地个人调试配置（微信官方建议不入库）
+project.private.config.json
+
+# 分析参考资料：原版 Android 仓库克隆（含嵌套 .git，约 13MB），不入库
+.analysis/
+
+# 助手会话记忆目录
+.workbuddy/
+
+# 系统文件
+.DS_Store
