@@ -1,0 +1,75 @@
+<view class="{{themeClass}} page">
+  <dj-nav title="{{s.so_title}}" back="{{true}}" settings="{{true}}" />
+
+  <scroll-view class="body" scroll-y>
+    <!-- 界格输入 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <text class="card__title serif">{{s.so_title}}</text>
+        <view class="field">
+          <input
+            class="field__input mono"
+            type="text"
+            value="{{query}}"
+            placeholder="{{s.so_ph}}"
+            placeholder-class="field__ph"
+            confirm-type="search"
+            bindinput="onQueryInput"
+            bindconfirm="onSearch"
+          />
+          <view class="field__btn serif {{loading ? 'is-disabled' : ''}}" bindtap="onSearch">{{s.so_btn}}</view>
+        </view>
+        <text class="err" wx:if="{{errMsg}}">{{errMsg}}</text>
+        <dj-ink show="{{loading}}" text="{{s.so_btn}}" />
+      </view>
+    </view>
+
+    <!-- 最近检索 -->
+    <view class="card" wx:if="{{recent.length > 0}}">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <text class="card__title serif">{{s.home_history_title}}</text>
+        <view class="chips">
+          <text class="chip mono" wx:for="{{recent}}" wx:key="id" data-q="{{item.query}}" bindtap="onPickRecent">{{item.query}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 命中结果：逐条落墨 -->
+    <view class="card" wx:if="{{searched}}">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <view class="row-between">
+          <text class="card__title serif">{{s.so_result}}</text>
+          <text class="so-count mono" wx:if="{{hits.length > 0}}">{{hits.length}} {{s.so_count}}</text>
+        </view>
+
+        <view class="none" wx:if="{{hits.length === 0}}">
+          <dj-stamp risk="clean" size="{{72}}" />
+          <text class="none__text">{{s.so_no_hit}}</text>
+        </view>
+
+        <view wx:else>
+          <block wx:for="{{hits}}" wx:key="url">
+            <view class="hit">
+              <view class="hit__seal serif">{{item.initial}}</view>
+              <view class="hit__mid">
+                <text class="hit__name">{{item.platform}}</text>
+                <text class="hit__cat">{{item.category}}</text>
+              </view>
+              <view class="hit__acts">
+                <text class="link" data-text="{{item.url}}" bindtap="onCopy">{{s.common_copy}}</text>
+              </view>
+            </view>
+            <view class="hairline" wx:if="{{index < hits.length - 1}}"></view>
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <view class="tabbar-space"></view>
+  </scroll-view>
+
+  <dj-tabbar current="tab_social" />
+</view>

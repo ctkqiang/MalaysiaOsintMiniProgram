@@ -1,0 +1,83 @@
+@import "../../styles/shared.less";
+
+/* ---------- 最近检索 chips ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+}
+.chip {
+  margin: 0 16rpx 16rpx 0;
+  padding: 10rpx 24rpx;
+  font-size: 24rpx;
+  color: var(--primary);
+  background: var(--primary-container);
+  border-radius: 32rpx;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.so-count {
+  font-size: 24rpx;
+  color: var(--danger);
+}
+
+/* ---------- 待接入 / 无命中 ---------- */
+.yp-pending {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 0;
+}
+.none {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 8rpx;
+}
+.none__text {
+  margin-left: 24rpx;
+  font-size: 26rpx;
+  color: var(--success);
+  letter-spacing: 2rpx;
+}
+
+/* ---------- 命中条目：左侧平台首字圆章 ---------- */
+.hit {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+}
+.hit__seal {
+  width: 72rpx;
+  height: 72rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2rpx solid var(--primary);
+  color: var(--primary);
+  font-size: 34rpx;
+  background: var(--ink-bg);
+}
+.hit__mid {
+  flex: 1;
+  margin-left: 24rpx;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.hit__name {
+  font-size: 28rpx;
+  color: var(--on-surface);
+}
+.hit__cat {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  color: var(--on-variant);
+}
+.hit__acts {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}

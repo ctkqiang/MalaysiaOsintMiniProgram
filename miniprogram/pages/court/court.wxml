@@ -1,0 +1,110 @@
+<view class="{{themeClass}} page">
+  <dj-nav title="{{s.ct_title}}" back="{{true}}" settings="{{true}}" />
+
+  <scroll-view class="body" scroll-y>
+    <!-- 界格输入 -->
+    <view class="card">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <text class="card__title serif">{{s.ct_title}}</text>
+        <view class="field">
+          <input
+            class="field__input"
+            type="text"
+            value="{{query}}"
+            placeholder="{{s.ct_ph}}"
+            placeholder-class="field__ph"
+            confirm-type="search"
+            bindinput="onQueryInput"
+            bindconfirm="onSearch"
+          />
+          <view class="field__btn serif {{loading ? 'is-disabled' : ''}}" bindtap="onSearch">{{s.ct_btn}}</view>
+        </view>
+        <text class="err" wx:if="{{errMsg}}">{{errMsg}}</text>
+        <dj-ink show="{{loading}}" text="{{s.ct_btn}}" />
+      </view>
+    </view>
+
+    <!-- 最近检索 -->
+    <view class="card" wx:if="{{recent.length > 0}}">
+      <view class="card__rail"></view>
+      <view class="card__body">
+        <text class="card__title serif">{{s.home_history_title}}</text>
+        <view class="chips">
+          <text class="chip mono" wx:for="{{recent}}" wx:key="id" data-q="{{item.query}}" bindtap="onPickRecent">{{item.query}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 结果统计 + 判决书界格列表 -->
+    <block wx:if="{{result}}">
+      <view class="card">
+        <view class="card__rail"></view>
+        <view class="card__body">
+          <text class="card__title serif">{{s.ct_result}}</text>
+
+          <view class="stats">
+            <view class="stats__item">
+              <text class="stats__num serif mono">{{result.totalRecord}}</text>
+              <text class="stats__label">{{s.ct_total}}</text>
+            </view>
+            <view class="stats__div"></view>
+            <view class="stats__item">
+              <text class="stats__num serif mono">{{result.items.length}}</text>
+              <text class="stats__label">{{s.ct_matched}}</text>
+            </view>
+            <view class="stats__div"></view>
+            <view class="stats__item">
+              <text class="stats__num serif mono">{{result.currPage}}/{{result.totalPage}}</text>
+              <text class="stats__label">{{s.ct_page}}</text>
+            </view>
+          </view>
+
+          <!-- 无结果：竹青提示 -->
+          <view class="none" wx:if="{{result.items.length === 0}}">
+            <dj-stamp risk="clean" size="{{72}}" />
+            <text class="none__text">{{s.ct_no_result}}</text>
+          </view>
+
+          <!-- 判决书列表：界格表格 -->
+          <view class="grid" wx:else>
+              <view class="case" wx:for="{{result.items}}" wx:key="index" wx:for-item="c">
+                <view class="case__head">
+                  <text class="case__idx serif">#{{index + 1}}</text>
+                  <text class="case__kw">{{c.keyWord || c.caseNo}}</text>
+                  <view class="case__pdf serif" wx:if="{{c.documentId}}" data-id="{{c.documentId}}" bindtap="onOpenDoc">{{s.ct_pdf}}</view>
+                </view>
+                <view class="case__rows">
+                  <view class="case__row" wx:if="{{c.caseNo}}">
+                    <text class="case__label">{{s.co_regno}}</text>
+                    <text class="case__value mono" data-text="{{c.caseNo}}" bindtap="onCopy">{{c.caseNo}}</text>
+                  </view>
+                  <view class="case__row" wx:if="{{c.parties}}">
+                    <text class="case__label">{{s.ct_parties}}</text>
+                    <text class="case__value">{{c.parties}}</text>
+                  </view>
+                  <view class="case__row" wx:if="{{c.corumJudge}}">
+                    <text class="case__label">{{s.ct_judge}}</text>
+                    <text class="case__value">{{c.corumJudge}}</text>
+                  </view>
+                  <view class="case__row" wx:if="{{c.dateOfAp}}">
+                    <text class="case__label">{{s.ct_date_ap}}</text>
+                    <text class="case__value mono">{{c.dateOfAp}}</text>
+                  </view>
+                  <view class="case__row" wx:if="{{c.dateOfResult}}">
+                    <text class="case__label">{{s.ct_date_result}}</text>
+                    <text class="case__value mono">{{c.dateOfResult}}</text>
+                  </view>
+                </view>
+                <view class="hairline case__line" wx:if="{{index < result.items.length - 1}}"></view>
+              </view>
+            </view>
+        </view>
+      </view>
+    </block>
+
+    <view class="tabbar-space"></view>
+  </scroll-view>
+
+  <dj-tabbar current="tab_court" />
+</view>
